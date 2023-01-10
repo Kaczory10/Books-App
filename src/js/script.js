@@ -1,4 +1,3 @@
-const books = dataSource.books;
 const templates = {
   bookTemplate: Handlebars.compile(
     document.querySelector('#template-book').innerHTML
@@ -17,7 +16,7 @@ class BooksList {
   }
   initData() {
     this.data = dataSource.books;
-  };
+  }
   render() {
     for (const book of this.data) {
       book.ratingBgc = this.determineRatingBgc(book.rating * 10);
@@ -27,7 +26,7 @@ class BooksList {
       bookList.appendChild(dom);
     }
   }
-  
+
   initActions() {
     const thisBookList = this;
 
@@ -35,13 +34,13 @@ class BooksList {
       event.preventDefault();
 
       const offsetParent = event.target.offsetParent;
-  
+
       if (offsetParent.classList.contains('favorite')) {
         offsetParent.classList.remove('favorite');
         favoriteBooks.splice(favoriteBooks.indexOf('favorite'), 1);
       } else {
         offsetParent.classList.add('favorite');
-  
+
         favoriteBooks.push(offsetParent);
       }
     });
@@ -65,29 +64,31 @@ class BooksList {
       }
     });
   }
-  
-  filterBooks() {
-  for (const book of this.data) {
-    const bookImage = document.querySelector('.book__image' + '[data-id="' + book.id + '"]'
-    );
-    if (!book.details[filters]) {
-      bookImage.classList.add('hidden');
-    }
-  }
-}
-unfilterBooks() {
-  for (const book of this.data) {
-    const bookImage = document.querySelector('.book__image' + '[data-id="' + book.id + '"]'
-    );
-    if (!book.details[filters]) {
-      bookImage.classList.remove('hidden');
-    }
-  }
-}
 
-determineRatingBgc(rating) {
-  return 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b ' + rating + '%);';
-};
+  filterBooks() {
+    for (const book of this.data) {
+      const bookImage = document.querySelector(
+        '.book__image' + '[data-id="' + book.id + '"]'
+      );
+      if (!book.details[filters]) {
+        bookImage.classList.add('hidden');
+      }
+    }
+  }
+  unfilterBooks() {
+    for (const book of this.data) {
+      const bookImage = document.querySelector(
+        '.book__image' + '[data-id="' + book.id + '"]'
+      );
+      if (!book.details[filters]) {
+        bookImage.classList.remove('hidden');
+      }
+    }
+  }
+
+  determineRatingBgc(rating) {
+    return 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b ' + rating + '%);';
+  }
 }
 
 console.log(favoriteBooks);
@@ -96,4 +97,5 @@ console.log(favoriteBooks);
 
 console.log(filters);
 
- const app = new BooksList();
+const app = new BooksList();
+console.log(app);

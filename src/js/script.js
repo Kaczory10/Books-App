@@ -3,84 +3,94 @@ const templates = {
     document.querySelector('#template-book').innerHTML
   ),
 };
-const bookList = document.querySelector('.books-list');
-const filters = [];
-const favoriteBooks = [];
-const nonFiction = document.querySelector('input[value=nonFiction]');
-const adults = document.querySelector('input[value=adults]');
+
 class BooksList {
   constructor() {
+    
     this.initData();
+    this.getElemnet();
     this.render();
     this.initActions();
+
+  }
+  getElemnet(){
+    this.bookList = document.querySelector('.books-list');
+    this.filters = [];
+    this.favoriteBooks = [];
+    this.nonFiction = document.querySelector('input[value=nonFiction]');
+    this.adults = document.querySelector('input[value=adults]');
+
   }
   initData() {
     this.data = dataSource.books;
   }
   render() {
+    const thisBookList = this;
     for (const book of this.data) {
       book.ratingBgc = this.determineRatingBgc(book.rating * 10);
       book.ratingWidth = book.rating * 10;
       const generatedHTML = templates.bookTemplate(book);
       const dom = utils.createDOMFromHTML(generatedHTML);
-      bookList.appendChild(dom);
+      thisBookList.bookList.appendChild(dom);
     }
   }
 
   initActions() {
     const thisBookList = this;
 
-    bookList.addEventListener('click', function (event) {
+    thisBookList.bookList.addEventListener('click', function (event) {
       event.preventDefault();
 
       const offsetParent = event.target.offsetParent;
 
       if (offsetParent.classList.contains('favorite')) {
         offsetParent.classList.remove('favorite');
-        favoriteBooks.splice(favoriteBooks.indexOf('favorite'), 1);
+        thisBookList.favoriteBooks.splice(thisBookList.favoriteBooks.indexOf('favorite'), 1);
       } else {
         offsetParent.classList.add('favorite');
 
-        favoriteBooks.push(offsetParent);
+        thisBookList.favoriteBooks.push(offsetParent);
       }
     });
 
-    nonFiction.addEventListener('change', function () {
+    thisBookList.nonFiction.addEventListener('change', function () {
       if (this.checked) {
-        filters.push('nonFiction');
+        thisBookList.filters.push('nonFiction');
         thisBookList.filterBooks();
       } else {
-        filters.splice(filters.indexOf('nonFiction'), 1);
+        thisBookList.filters.splice(thisBookList.filters.indexOf('nonFiction'), 1);
         thisBookList.unfilterBooks();
       }
     });
-    adults.addEventListener('change', function () {
+    thisBookList.adults.addEventListener('change', function () {
       if (this.checked) {
-        filters.push('adults');
+        thisBookList.filters.push('adults');
         thisBookList.filterBooks();
       } else {
-        filters.splice(filters.indexOf('adults'), 1);
+        thisBookList.filters.splice(thisBookList.filters.indexOf('adults'), 1);
         thisBookList.unfilterBooks();
       }
     });
   }
 
   filterBooks() {
+    const thisBookList = this;
     for (const book of this.data) {
       const bookImage = document.querySelector(
         '.book__image' + '[data-id="' + book.id + '"]'
       );
-      if (!book.details[filters]) {
+      if (!book.details[thisBookList.filters]) {
         bookImage.classList.add('hidden');
       }
     }
   }
   unfilterBooks() {
+    const thisBookList = this;
     for (const book of this.data) {
       const bookImage = document.querySelector(
         '.book__image' + '[data-id="' + book.id + '"]'
       );
-      if (!book.details[filters]) {
+      if (!book.details[thisBookList.filters]) {
         bookImage.classList.remove('hidden');
       }
     }
@@ -90,12 +100,12 @@ class BooksList {
     return 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b ' + rating + '%);';
   }
 }
+const thisBookList = this;
+console.log(thisBookList.favoriteBooks);
 
-console.log(favoriteBooks);
+console.log(thisBookList.favoriteBooks);
 
-console.log(favoriteBooks);
-
-console.log(filters);
+console.log(thisBookList.filters);
 
 const app = new BooksList();
 console.log(app);
